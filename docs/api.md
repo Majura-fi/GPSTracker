@@ -49,19 +49,19 @@ Checks if latest path is still considered as live. When the last recorded point 
 
 When the last path is live:
 
-```json
+```
 {
   "status": "ok",
   "content": {
     "islive": true,
-    "path_id": 1
+    "path_id": Integer
   }
 }
 ```
 
 When the last path is not live:
 
-```json
+```
 {
   "status": "ok",
   "content": {
@@ -74,14 +74,16 @@ When the last path is not live:
 
 Returns meta information for the path that has given id.
 
-```json
+```
 {
   "status": "ok",
   "content": {
-    "path_id": 1,
-    "point_count": 4,
-    "first_point_time": "2019-11-04T12:13:00Z",
-    "last_point_time": "2019-11-04T14:56:00Z"
+    "path_id": Integer,
+    "point_count": Integer,
+
+    // Format: YYYY-MM-DDTHH:MM:SSZ
+    "first_point_time": String,
+    "last_point_time": String
   }
 }
 ```
@@ -90,32 +92,41 @@ Returns meta information for the path that has given id.
 
 Returns full path information, including recorded locations.
 
-```json
+```
 {
   "status": "ok",
   "content": {
     "info": {
-      "path_id": 1,
-      "point_count": 4,
-      "first_point_time": "2019-11-04T12:13:00Z",
-      "last_point_time": "2019-11-04T14:56:00Z"
+      "path_id": Integer,
+      "point_count": Integer,
+
+      // Format: YYYY-MM-DDTHH:MM:SSZ
+      "first_point_time": String,
+      "last_point_time": String
     },
     "points": [
       {
-        "latitude": "61.4991",
-        "longitude": "23.7871",
-        "time": "2019-11-04T12:13:00Z",
-        "speed": "1.2",
-        "altitude": "0",
-        "accuracy": "1"
+        "latitude": Float,
+        "longitude": Float,
+
+        // Format: YYYY-MM-DDTHH:MM:SSZ
+        "time": String,
+
+        "speed": Float,
+        "altitude": Float,
+        "accuracy": Float
       },
-      ...{
-        "latitude": "61.5012",
-        "longitude": "23.8053",
-        "time": "2019-11-04T14:56:00Z",
-        "speed": "1",
-        "altitude": "2",
-        "accuracy": "3"
+      ...
+      {
+        "latitude": Float,
+        "longitude": Float,
+
+        // Format: YYYY-MM-DDTHH:MM:SSZ
+        "time": String,
+
+        "speed": Float,
+        "altitude": Float,
+        "accuracy": Float
       }
     ]
   }
@@ -126,21 +137,25 @@ Returns full path information, including recorded locations.
 
 Returns every path's meta information.
 
-```json
+```
 {
   "status": "ok",
   "content": [
     {
-      "path_id": 1,
-      "point_count": 4,
-      "first_point_time": "2019-11-04T12:13:00Z",
-      "last_point_time": "2019-11-04T14:56:00Z"
+      "path_id": Integer,
+      "point_count": Integer,
+
+      // Format: YYYY-MM-DDTHH:MM:SSZ
+      "first_point_time": String,
+      "last_point_time": String
     },
     ...{
-      "path_id": 4,
-      "point_count": 43,
-      "first_point_time": "2019-11-04T20:13:00Z",
-      "last_point_time": "2019-11-04T21:56:00Z"
+      "path_id": Integer,
+      "point_count": Integer,
+
+      // Format: YYYY-MM-DDTHH:MM:SSZ
+      "first_point_time": String,
+      "last_point_time": String
     }
   ]
 }
