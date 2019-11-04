@@ -4,6 +4,8 @@ Collects user submitted GPS-locations and displays them as a path on a webpage i
 
 Users can browse recorded paths and explore GPS-point information on each path. Paths are separated into new paths when there is more than one hour delay since the last point.
 
+Screenshot from the [Main view](https://i.imgur.com/ejgP0Is.png)
+
 ## Notice
 
 - The Google Maps api key goes to frontend/index.html @ line 11.
