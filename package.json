@@ -19,7 +19,7 @@
     "grunt-move": "^0.1.2",
     "grunt-replace": "^1.0.1",
     "grunt-string-replace": "^1.3.1",
-    "moment": "^2.19.1",
+    "moment": "^2.19.3",
     "ngmap": "^1.18.4"
   },
   "dependencies": {
