@@ -1,0 +1,15 @@
+CREATE TABLE `locations` (
+	`guid` INT(11) NOT NULL AUTO_INCREMENT,
+	`path_id` INT(11) NOT NULL,
+	`latitude` FLOAT NOT NULL,
+	`longitude` FLOAT NOT NULL,
+	`altitude` FLOAT NOT NULL DEFAULT '0',
+	`speed` FLOAT NOT NULL DEFAULT '0',
+	`accuracy` FLOAT NOT NULL DEFAULT '0',
+	`time_utc` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (`guid`)
+)
+COLLATE='latin1_swedish_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=5
+;

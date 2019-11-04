@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html ng-app="GPSTracker">
+  <head>
+    <title>Missä mennään?</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="vendor.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Add "?key=your_api_key" to the url below to enable Google maps. -->
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+    <script type="text/javascript" src="vendor.js"></script>
+    <script type="text/javascript" src="main.js"></script>
+  </head>
+  <body ng-controller="MapCtrl">
+    <div id="mainContainer">
+
+      <div ng-if="vm.showTest" style="position: absolute; left: calc(50% - 400px); display: block; z-index: 100; background-color: white; width: 800px; height: 600px;">
+        <textarea style="width: 100%; height: 80%;" ng-model="vm.asdResults"></textarea>
+        <a ng-click="vm.asd()" style="cursor: pointer;">Send</a>
+      </div>
+
+      <div id="sidePanel" ng-if="!vm.isMobile">
+        <div class="section logo"></div>
+
+        <div class="languageSelection">
+          <div class="english" ng-click="vm.changeLanguage('en')"></div>
+          <div class="finland" ng-click="vm.changeLanguage('fi')"></div>
+        </div>
+
+        <div ng-if="vm.asd">
+          <input type="checkbox" ng-model="vm.showTest"> Show Test
+          <input type="checkbox" ng-model="vm.spoof"> Spoof
+        </div>
+
+        <div class="section liveControl">
+          <h2 class="header">{{'LIVE_CONTROL' | translate}}</h2>
+          <label>
+            <input type="checkbox" ng-model="vm.live.followLatestPoint">
+            {{'CENTER_TO_LATEST_POINT' | translate}}
+          </label>
+          <label>
+            <input type="checkbox" ng-model="vm.live.displayLatestPoint">
+            {{'SELECT_LATEST_POINT' | translate}}
+          </label>
+        </div>
+
+        <div class="section availablePaths">
+          <h2 class="header">{{'AVAILABLE_PATHS' | translate}}</h2>
+
+          <ol class="pathList">
+            <a ng-repeat="(pathId, path) in vm.availablePaths">
+              <li
+                class="pathLink"
+                ng-click="vm.onPathSelect(pathId)"
+                ng-class="{selectedPath: vm.currentPath.info.pathId == pathId}">
+                  {{::path.firstPointTime | date : 'yyyy.MM.dd'}}
+                  <img
+                    ng-if="vm.newerThan30Seconds(path.lastPointTime)"
+                    src="img/live.png"/>
+              </li>
+            </a>
+          </ol>
+        </div>
+
+        <div class="section infoBox" ng-if="vm.selectedPoint">
+          <h2 class="header">{{'PATH_INFO' | translate}}</h2>
+          <div class="infoRow">
+            <div class="infoName">{{'PATH_POINTS_COUNT' | translate}}</div>
+            <div class="infoValue">{{vm.currentPath.info.pointsCount}}</div>
+          </div>
+          <div class="infoRow">
+            <div class="infoName">{{'PATH_STARTED' | translate}}</div>
+            <div class="infoValue">{{vm.currentPath.info.firstPointTime | date : 'yyyy.MM.dd HH:mm:ss'}}</div>
+          </div>
+          <div class="infoRow">
+            <div class="infoName">{{'PATH_ENDED' | translate}}</div>
+            <div class="infoValue">
+              <span ng-if="!vm.newerThan30Seconds(vm.currentPath.info.lastPointTime)">
+                {{vm.currentPath.info.lastPointTime | date : 'yyyy.MM.dd HH:mm:ss'}}
+              </span>
+              <span ng-if="vm.newerThan30Seconds(vm.currentPath.info.lastPointTime)">
+                {{'PATH_UNFINISHED' | translate}}
+              </span>
+            </div>
+          </div>
+          <div class="infoRow">
+            <div class="infoName">{{'PATH_DURATION' | translate}}</div>
+            <div class="infoValue">
+              {{vm.calculateDuration(vm.currentPath.info) | duration_hours}} {{'HOURS' | translate}}
+            </div>
+          </div>
+        </div>
+
+        <div class="section infoBox" ng-if="vm.selectedPoint">
+          <h2 class="header" translate="POINT_INFO" translate-value-number="{{vm.selectedPointIndex}}"></h2>
+          <div class="infoRow">
+            <div class="infoName">{{'ACCURACY' | translate}}</div>
+            <div class="infoValue">{{vm.selectedPoint.accuracy}} m</div>
+          </div>
+          <div class="infoRow">
+            <div class="infoName">{{'ALTITUDE' | translate}}</div>
+            <div class="infoValue">{{vm.selectedPoint.altitude}} m</div>
+          </div>
+          <div class="infoRow">
+            <div class="infoName">{{'SPEED' | translate}}</div>
+            <div class="infoValue">{{vm.selectedPoint.speed | speed_ms_to_kmh}}</div>
+          </div>
+          <div class="infoRow">
+            <div class="infoName">{{'TIME' | translate}}</div>
+            <div class="infoValue">{{vm.selectedPoint.time | date : 'HH:mm:ss'}}</div>
+          </div>
+
+          <div class="section pointControl">
+            <a class="previousPointButton" repeat-on-hold ng-click="vm.previousPoint()"></a>
+            <input
+              type="number"
+              ng-change="vm.selectedPointChanged()"
+              ng-model="vm.selectedPointIndex">
+            <a class="nextPointButton" repeat-on-hold ng-click="vm.nextPoint()"></a>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div id="topPanel">
+        <a class="previousPointButton" repeat-on-hold ng-click="vm.previousPoint()"></a>
+        <md-slider
+          class="slider"
+          ng-model="vm.selectedPointIndex"
+          ng-change="vm.selectedPointChangedSlider()"
+          aria-label="Current Point"
+          min="0"
+          max="{{vm.currentPath.info.pointsCount - 1}}">
+        </md-slider>
+        <a class="nextPointButton" repeat-on-hold ng-click="vm.nextPoint()"></a>
+      </div>
+
+
+      <ng-map
+        default-style="false"
+        center="[{{vm.mapCenter.latitude}}, {{vm.mapCenter.longitude}}]"
+        zoom="8"
+        gestureHandling="greedy"
+        id="map">
+
+        <marker ng-if="vm.selectedPoint"
+          position="{{vm.selectedPoint.location}}"
+          title="Selected point">
+        </marker>
+
+        <shape ng-if="vm.currentPath.points.length > 1"
+          name="polyline"
+          path="{{vm.currentPath.points}}"
+          stroke-color="#FF0000"
+          stroke-opacity="1.0"
+          stroke-weight="3">
+        </shape>
+
+      </ng-map>
+    </div>
+
+  <script src="http://127.0.0.1:35729/livereload.js"></script>
+  </body>
+</html>

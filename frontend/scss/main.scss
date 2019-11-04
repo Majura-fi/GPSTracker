@@ -1,0 +1,195 @@
+.previousPointButton {
+  background-image: url('img/previous.svg');
+}
+
+.nextPointButton {
+  background-image: url('img/next.svg');
+}
+
+.previousPointButton,
+.nextPointButton {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+}
+
+.pointControl {
+  display: grid;
+  grid-template-columns: 50px auto 50px;
+  grid-template-rows: auto;
+  grid-gap: 5px;
+}
+
+#mainContainer {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 300px auto;
+  grid-template-rows: 50px auto;
+  grid-gap: 0;
+}
+
+#map {
+  grid-column: ~"2 / 4";
+  grid-row: ~"2 / 4";
+}
+
+#topPanel {
+  grid-column: ~"2 / 4";
+  grid-row: 1;
+
+  display: grid;
+  grid-template-columns: 50px auto 50px;
+  grid-template-rows: 50px;
+
+  background-color: white;
+
+  .slider {
+    grid-column: 2;
+    grid-row: 1;
+    padding: 0 20px;
+  }
+
+  .previousPointButton {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .nextPointButton {
+    grid-column: 3;
+    grid-row: 1;
+  }
+}
+
+.languageSelection {
+  .english {
+    background-image: url('img/en.png');
+  }
+  .finland {
+    background-image: url('img/fi.png');
+  }
+
+  .english, .finland {
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+  }
+}
+
+#sidePanel {
+  grid-column: 1;
+  grid-row: ~"1 / 4";
+  background-color: white;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 10px;
+
+  .logo {
+    display: block;
+    width: 100%;
+    height: 48px;
+    margin-left: auto;
+    margin-right: auto;
+
+    background-image: url('img/logo.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+  }
+
+  .section {
+    margin-bottom: 2em;
+
+    .header {
+      font-size: 1.5rem;
+    }
+  }
+
+  .availablePaths {
+    width: inherit;
+    word-break: normal;
+
+    .pathList {
+      max-height: 140px;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    ol {
+      list-style: none;
+      padding-left: 10px;
+    }
+
+    .pathLink:hover {
+      cursor: pointer;
+      background-color: rgba(139, 195, 74, 0.5);
+    }
+
+    .selectedPath {
+      font-weight: bold;
+      background-color: rgb(139, 195, 74);
+    }
+  }
+
+  .infoBox {
+    .infoRow {
+      display: block;
+      cursor: default;
+    }
+
+    .infoName, .infoValue {
+      display: inline-block;
+    }
+
+    .infoName {
+      font-size: 1.2em;
+    }
+
+    .infoValue {
+      cursor: default;
+      border-radius: 5px;
+      padding: 0px 4px;
+      background-color: #eee;
+    }
+  }
+}
+
+.md-thumb:after,
+.md-track-fill{
+    background-color: rgb(139, 195, 74) !important;
+    border-color: rgb(139, 195, 74) !important;
+}
+.md-focus-thumb,
+.md-focus-ring{
+    background-color: rgb(139, 195, 74);
+}
+
+md-slider, #map * {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+  cursor: pointer;
+}
+
+
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
